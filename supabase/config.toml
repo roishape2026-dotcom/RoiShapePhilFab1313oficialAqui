@@ -1,0 +1,5 @@
+[functions.generate-workout]
+verify_jwt = true
+
+[functions.admin-provision]
+verify_jwt = false

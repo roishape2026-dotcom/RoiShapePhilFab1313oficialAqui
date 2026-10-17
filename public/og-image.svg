@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#09090b"/>
+      <stop offset="100%" stop-color="#0a1f14"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <!-- Logo circle -->
+  <circle cx="600" cy="200" r="60" fill="none" stroke="url(#accent)" stroke-width="4"/>
+  <circle cx="600" cy="185" r="18" fill="#10B981"/>
+  <path d="M570 250 Q600 220 630 250" stroke="#10B981" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M600 203 L600 230" stroke="#10B981" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M588 220 L600 235 L612 220" stroke="#10B981" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Title -->
+  <text x="600" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="56" font-weight="bold" fill="#ffffff">Fullbody ROI Shape</text>
+  <text x="600" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#10B981">O Método de Elite para Personais &amp; Alunos</text>
+  <!-- Bottom bar -->
+  <rect x="0" y="600" width="1200" height="30" fill="url(#accent)" opacity="0.3"/>
+  <text x="600" y="560" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#6b7280">roishape.com.br</text>
+</svg>
