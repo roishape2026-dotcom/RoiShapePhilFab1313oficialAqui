@@ -140,89 +140,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // If normal login fails AND this is the admin provisioning email,
     // call the server-side provisioning edge function (password stays server-side).
-    if (error) {
-      const isProvisionEmail = cleanEmail === 'roishape2026@gmail.com';
-      if (!isProvisionEmail) {
-        await supabase.auth.signOut();
-        setSession(null);
-        setProfile(null);
-        return { error: translateError(error.message) };
-      }
-
-      try {
-        const fnUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-provision`;
-        const resp = await fetch(fnUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-          },
-          body: JSON.stringify({ email: cleanEmail, password: cleanPassword }),
-        });
-
-        if (!resp.ok) {
-          const body = await resp.json().catch(() => ({}));
-          return { error: body.error || 'Falha ao provisionar conta admin. Tente novamente.' };
+        if (error) {
+      await supabase.auth.signOut();
+      setSession(null);
+      setProfile(null);
+      return { error: translateError(error.message) };
         }
-
-        const { access_token, refresh_token } = await resp.json();
-        if (!access_token || !refresh_token) {
-          return { error: 'Falha ao obter sessão admin. Tente novamente.' };
-        }
-
-        // Set the session from the tokens returned by the edge function
-        const { error: sessionError } = await supabase.auth.setSession({
-          access_token,
-          refresh_token,
-        });
-
-        if (sessionError) {
-          return { error: translateError(sessionError.message) };
-        }
-
-        // Fetch the freshly-created profile
-        const {
-          data: { user: provisionedUser },
-        } = await supabase.auth.getUser();
-
-        if (!provisionedUser) {
-          await supabase.auth.signOut();
-          return { error: 'Falha ao obter dados do usuário admin.' };
-        }
-
-        const p = await fetchProfile(provisionedUser.id);
-        if (!p) {
-          // The trigger may need a moment — wait briefly and retry once
-          await new Promise((r) => setTimeout(r, 500));
-          const p2 = await fetchProfile(provisionedUser.id);
-          if (!p2) {
-            await supabase.auth.signOut();
-            setSession(null);
-            setProfile(null);
-            return { error: 'Perfil admin não encontrado após provisionamento. Contate o suporte.' };
-          }
-          setProfile(p2);
-        } else {
-          setProfile(p);
-        }
-
-        // Best-effort session logging
-        try {
-          await supabase.from('session_logs').insert({
-            user_id: provisionedUser.id,
-            user_email: cleanEmail,
-            user_agent: navigator.userAgent,
-            ip_hash: null,
-          });
-        } catch {
-          // best-effort
-        }
-
-        return { error: null };
-      } catch {
-        return { error: 'Erro de conexão ao provisionar conta admin. Verifique sua internet e tente novamente.' };
-      }
-    }
+      
 
     if (!data.user) return { error: 'Falha na autenticação. Tente novamente.' };
 
